@@ -5,14 +5,22 @@ import deepmerge from 'deepmerge';
 const INIT_ACTION = '@ngrx/store/init';
 const UPDATE_ACTION = '@ngrx/store/update-reducers';
 
-const detectDate = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/;
-
-// correctly parse dates from local storage
-export const dateReviver = (_key: string, value: any) => {
-    if (typeof value === 'string' && detectDate.test(value)) {
-        return new Date(value);
+function dateOrDefault(dateString: string): Date | string {
+    const maybeDate = new Date(dateString);
+    if (maybeDate.toString() === "Invalid Date") {
+        return dateString;
+    } else {
+        return maybeDate;
     }
-    return value;
+}
+
+// correctly* correctly parse dates from local storage
+export const dateReviver = (_key: string, value: any) => {
+    if (typeof value === 'string') {
+        return dateOrDefault(value as string);
+    } else {
+        return value;
+    }
 };
 
 const dummyReviver = (_key: string, value: any) => value;
@@ -154,7 +162,7 @@ export const syncStateUpdate = (
         let space: string | number;
         let encrypt;
 
-        if (typeof key === 'object') {
+    if (typeof key === 'object') {
             let name = Object.keys(key)[0];
             stateSlice = state[name];
 
