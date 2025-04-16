@@ -18,12 +18,6 @@ class TypeB {
     constructor(public afield: string) {}
 }
 
-function runsWithoutThrowing(fn): boolean {
- try {
-
- }
-}
-
 class TypeA {
     static reviver(key: string, value: any): any {
         if (typeof value === 'object') {
@@ -724,7 +718,7 @@ describe('ngrxLocalStorage', () => {
             'Tuesday, April 15, 2025', // full day name
             'Tue, 15 Apr 2025', // RFC 2822 format
         ];
-     
+
         const detectDate = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/;
         const oldDateReviver = (_key: string, value: any) => {
             if (typeof value === 'string' && detectDate.test(value)) {
@@ -734,6 +728,6 @@ describe('ngrxLocalStorage', () => {
         };
 
         //then
-        sampleDateTimes.forEach(date => expect(oldDateReviver(null, date)).toNotEqual(new Date(date)));
+        sampleDateTimes.forEach(date => expect(oldDateReviver(null, date)).toEqual(date));
     });
 });
