@@ -14,10 +14,10 @@ function dateOrDefault(dateString: string): Date | string {
     }
 }
 
-// correctly* correctly parse dates from local storage
+// correctly parse dates from local storage
 export const dateReviver = (_key: string, value: any) => {
     if (typeof value === 'string') {
-        return dateOrDefault(value as string);
+        return dateOrDefault(value);
     } else {
         return value;
     }

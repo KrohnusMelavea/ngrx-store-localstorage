@@ -675,59 +675,10 @@ describe('ngrxLocalStorage', () => {
             '2025-04-12Tfdsa00:00:00', // ISO with time
             '2025-04-12Tfdsa00:00:00Z', // ISO UTC
             '2025-04-fdsa12T00:00:00+02:00', // ISO with timezone
+            '{ "nestedDate": "2025-04-12T00:00:00Z" }' // nested json date
         ];
 
         // then
         sampleDateTimes.forEach(date => expect(dateReviver(null, date)).toEqual(date));
-    });
-    it('should succeed on various valid date formats when parsing string via old dateReviver', () => {
-        // given
-        const sampleDateTimes = [
-            '2025-04-12T00:00:00', // ISO with time
-            '2025-04-12T00:00:00Z', // ISO UTC
-            '2025-04-12T00:00:00+02:00', // ISO with timezone
-        ];
-
-        const detectDate = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/;
-        const oldDateReviver = (_key: string, value: any) => {
-            if (typeof value === 'string' && detectDate.test(value)) {
-                return new Date(value);
-            }
-            return value;
-        };
-
-        //then
-        sampleDateTimes.forEach(date => expect(oldDateReviver(null, date)).toEqual(new Date(date)));
-    });
-    it('should fail on various valid date formats when parsing string via old dateReviver', () => {
-        // given
-        const sampleDateTimes = [
-            '2025/04/15', // yyyy/mm/dd
-            '2025-04-15', // yyyy-mm-dd (ISO 8601)
-            '12/04/2025', // dd/mm/yyyy
-            '12-04-2025', // dd-mm-yyyy
-            '04/15/2025', // mm/dd/yyyy (US)
-            '04-15-2025', // mm-dd-yyyy (US)
-            'Apr 15, 2025', // short month format
-            '15 Apr 2025', // day short month year
-            'April 15, 2025', // full month format
-            '15 April 2025', // day full month year
-            '2025.04.15', // dot-separated
-            '2025-Apr-15', // ISO variation
-            '2025-April-15', // verbose ISO
-            'Tuesday, April 15, 2025', // full day name
-            'Tue, 15 Apr 2025', // RFC 2822 format
-        ];
-
-        const detectDate = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/;
-        const oldDateReviver = (_key: string, value: any) => {
-            if (typeof value === 'string' && detectDate.test(value)) {
-                return new Date(value);
-            }
-            return value;
-        };
-
-        //then
-        sampleDateTimes.forEach(date => expect(oldDateReviver(null, date)).toEqual(date));
     });
 });
